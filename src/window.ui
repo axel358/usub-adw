@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Created with Cambalache 0.9.0 -->
+<interface>
+  <!-- interface-name window.ui -->
+  <requires lib="gtk" version="4.0"/>
+  <template class="UsubWindow" parent="GtkApplicationWindow">
+    <property name="default-height">500</property>
+    <property name="default-width">600</property>
+    <child>
+      <object class="GtkScrolledWindow" id="subs_scroll">
+        <property name="margin-bottom">5</property>
+        <property name="margin-end">5</property>
+        <property name="margin-start">5</property>
+        <property name="margin-top">5</property>
+        <property name="vexpand">True</property>
+      </object>
+    </child>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="header_bar">
+        <child type="start">
+          <object class="GtkButton">
+            <property name="icon-name">help-about-symbolic</property>
+            <signal name="clicked" handler="on_about_action"/>
+          </object>
+        </child>
+        <child type="title">
+          <object class="GtkEntry" id="url_entry">
+            <property name="hexpand">True</property>
+            <property name="placeholder-text">Video url</property>
+            <signal name="activate" handler="parse_url"/>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkButton">
+            <property name="icon-name">edit-find-symbolic</property>
+            <signal name="clicked" handler="parse_url"/>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

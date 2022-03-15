@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=USub
+Exec=usub
+Icon=cu.axel.usub
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true

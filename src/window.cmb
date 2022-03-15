@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE cambalache-project SYSTEM "cambalache-project.dtd">
+<cambalache-project version="0.9.0" target_tk="gtk-4.0">
+  <ui>
+	(1,1,"window.ui","window.ui",None,None,None,None,None,None)
+  </ui>
+  <ui_library>
+	(1,"gtk","4.0",None)
+  </ui_library>
+  <object>
+	(1,1,"GtkApplicationWindow","UsubWindow",None,None,None,None,None),
+	(1,2,"GtkScrolledWindow","subs_scroll",1,None,None,None,None),
+	(1,4,"GtkHeaderBar","header_bar",1,None,"titlebar",None,1),
+	(1,5,"GtkButton",None,4,None,"start",None,None),
+	(1,6,"GtkEntry","url_entry",4,None,"title",None,1),
+	(1,7,"GtkButton",None,4,None,"end",None,2)
+  </object>
+  <object_property>
+	(1,1,"GtkWindow","default-height","500",None,None,None,None,None),
+	(1,1,"GtkWindow","default-width","600",None,None,None,None,None),
+	(1,2,"GtkWidget","margin-bottom","5",None,None,None,None,None),
+	(1,2,"GtkWidget","margin-end","5",None,None,None,None,None),
+	(1,2,"GtkWidget","margin-start","5",None,None,None,None,None),
+	(1,2,"GtkWidget","margin-top","5",None,None,None,None,None),
+	(1,2,"GtkWidget","vexpand","True",None,None,None,None,None),
+	(1,5,"GtkButton","icon-name","help-about-symbolic",None,None,None,None,None),
+	(1,6,"GtkEntry","placeholder-text","Video url",None,None,None,None,None),
+	(1,6,"GtkWidget","hexpand","True",None,None,None,None,None),
+	(1,7,"GtkButton","icon-name","edit-find-symbolic",None,None,None,None,None)
+  </object_property>
+  <object_signal>
+	(1,1,6,"GtkEntry","activate","parse_url",None,None,None,None,None),
+	(3,1,7,"GtkButton","clicked","parse_url",None,None,None,None,None),
+	(4,1,5,"GtkButton","clicked","on_about_action",None,None,None,None,None)
+  </object_signal>
+</cambalache-project>

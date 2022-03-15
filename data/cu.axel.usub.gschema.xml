@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="usub">
+	<schema id="cu.axel.usub" path="/cu/axel/usub/">
+	</schema>
+</schemalist>
