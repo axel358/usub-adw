@@ -18,9 +18,9 @@
   <object_property>
 	(1,1,"GtkWindow","default-height","500",None,None,None,None,None),
 	(1,1,"GtkWindow","default-width","600",None,None,None,None,None),
-	(1,2,"GtkWidget","margin-bottom","5",None,None,None,None,None),
-	(1,2,"GtkWidget","margin-end","5",None,None,None,None,None),
-	(1,2,"GtkWidget","margin-start","5",None,None,None,None,None),
+	(1,2,"GtkWidget","margin-bottom","10",None,None,None,None,None),
+	(1,2,"GtkWidget","margin-end","10",None,None,None,None,None),
+	(1,2,"GtkWidget","margin-start","10",None,None,None,None,None),
 	(1,2,"GtkWidget","margin-top","5",None,None,None,None,None),
 	(1,2,"GtkWidget","vexpand","True",None,None,None,None,None),
 	(1,5,"GtkButton","icon-name","help-about-symbolic",None,None,None,None,None),
