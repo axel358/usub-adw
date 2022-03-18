@@ -57,6 +57,10 @@ class UsubWindow(Gtk.ApplicationWindow):
     def update_sub_list(self, sub_list):
         subs_list_box = Gtk.ListBox()
         subs_list_box.set_selection_mode(Gtk.SelectionMode.NONE)
+        subs_list_box.set_margin_top(10)
+        subs_list_box.set_margin_bottom(10)
+        subs_list_box.set_margin_start(10)
+        subs_list_box.set_margin_end(10)
         self.subs_scroll.set_child(subs_list_box)
         
         for sub in sub_list:
@@ -79,7 +83,7 @@ class UsubWindow(Gtk.ApplicationWindow):
             row_content.append(sub_translate_btn)
             row_content.append(sub_download_btn)
             row.set_child(row_content)
-            row.set_margin_top(5)
+            row.set_margin_bottom(5)
             subs_list_box.append(row)
             
     def download_sub(self, button, sub):
