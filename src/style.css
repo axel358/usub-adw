@@ -1,13 +1,6 @@
 @define-color accent_bg_color @red_3;
 @define-color accent_color @red_3;
-@define-color headerbar_bg_color @red_3;
-@define-color headerbar_backdrop_color @red_2;
-@define-color headerbar_fg_color @light_1;
 
 .suggested-button{
-    color: @theme_selected_bg_color;
-}
-
-.suggested-button:hover:active {
-    color: @theme_selected_fg_color;
+    color: @accent_color;
 }

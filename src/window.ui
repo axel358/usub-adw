@@ -4,8 +4,8 @@
   <!-- interface-name window.ui -->
   <requires lib="gtk" version="4.0"/>
   <template class="UsubWindow" parent="GtkApplicationWindow">
-    <property name="default-height">500</property>
-    <property name="default-width">600</property>
+    <property name="default-height">400</property>
+    <property name="default-width">500</property>
     <child>
       <object class="GtkScrolledWindow" id="subs_scroll">
         <property name="vexpand">True</property>

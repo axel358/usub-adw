@@ -25,7 +25,7 @@ from gi.repository import Gtk, Gio, Adw
 from .window import UsubWindow
 
 
-class Application(Gtk.Application):
+class Application(Adw.Application):
     def __init__(self):
         super().__init__(application_id='cu.axel.usub',
                          flags=Gio.ApplicationFlags.FLAGS_NONE)
