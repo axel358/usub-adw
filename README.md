@@ -6,9 +6,11 @@ A simple libadwita app to download subtitles for YouTube videos using [YouTube t
 Building:
 
 Requires YouTube transcript api
+
 Use <i>pip install youtube_transcript_api</i> to install it
 
 Then do:
+
 <i>meson build --prefix=/usr</i>
 <i>cd build</i>
 <i>sudo ninja install</i>
