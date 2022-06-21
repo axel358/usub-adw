@@ -15,8 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import gi
 import urllib.parse as urlparse
-from gi.repository import Gtk, Gdk
+gi.require_version('Adw', '1')
+from gi.repository import Gtk, Gdk, Adw
 from youtube_transcript_api import YouTubeTranscriptApi as yt_api
 from youtube_transcript_api.formatters import WebVTTFormatter
 
@@ -27,6 +29,7 @@ class UsubWindow(Gtk.ApplicationWindow):
 
     subs_scroll = Gtk.Template.Child()
     url_entry = Gtk.Template.Child()
+    toast_overlay = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -73,12 +76,13 @@ class UsubWindow(Gtk.ApplicationWindow):
             sub_lang_label.set_margin_start(5)
             row_content.append(sub_lang_label)
             sub_download_btn = Gtk.Button().new_from_icon_name('download-symbolic')
-            sub_download_btn.add_css_class('circular')
+            sub_download_btn.add_css_class('flat')
             sub_download_btn.add_css_class('suggested-button')
             sub_download_btn.connect('clicked', self.download_sub, sub)
             sub_download_btn.set_margin_start(5)
             sub_translate_btn = Gtk.Button().new_from_icon_name('translate-symbolic')
             sub_translate_btn.set_margin_start(5)
+            sub_translate_btn.add_css_class('flat')
             sub_translate_btn.connect('clicked', self.translate_sub, sub)
             row_content.append(sub_translate_btn)
             row_content.append(sub_download_btn)
@@ -129,6 +133,7 @@ class UsubWindow(Gtk.ApplicationWindow):
                 file.write(sub)
                 
         dialog.destroy()
+        self.toast_overlay.add_toast(Adw.Toast().new(title = 'Subtitle saved'))
     
     def get_video_id(self, url):
         url_data = urlparse.urlparse(url)

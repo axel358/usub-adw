@@ -1,14 +1,18 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Cambalache 0.9.0 -->
 <interface>
   <!-- interface-name window.ui -->
   <requires lib="gtk" version="4.0"/>
   <template class="UsubWindow" parent="GtkApplicationWindow">
-    <property name="default-height">400</property>
-    <property name="default-width">500</property>
+    <property name="default-height">500</property>
+    <property name="default-width">600</property>
     <child>
-      <object class="GtkScrolledWindow" id="subs_scroll">
-        <property name="vexpand">True</property>
+      <object class="AdwToastOverlay" id="toast_overlay">
+        <child>
+          <object class="GtkScrolledWindow" id="subs_scroll">
+            <property name="vexpand">True</property>
+          </object>
+        </child>
       </object>
     </child>
     <child type="titlebar">
@@ -36,3 +40,4 @@
     </child>
   </template>
 </interface>
+

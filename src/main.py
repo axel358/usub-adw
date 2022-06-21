@@ -17,7 +17,6 @@
 
 import sys
 import gi
-
 gi.require_version('Gtk', '4.0')
 gi.require_version('Adw', '1')
 from gi.repository import Gtk, Gio, Adw
@@ -35,6 +34,11 @@ class Application(Adw.Application):
         if not win:
             win = UsubWindow(application=self)
         win.present()
+
+    def some(self):
+        app = Adw.App
+
+
 
 
 def main(version):
