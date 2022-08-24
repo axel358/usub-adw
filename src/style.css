@@ -1,6 +1,11 @@
-@define-color accent_bg_color @red_3;
-@define-color accent_color @red_3;
+.suggested-button {
+    color: @theme_selected_bg_color;
+}
 
-.suggested-button{
-    color: @accent_color;
+.toast {
+    border-radius: 12px;
+    padding-bottom: 6px;
+    padding-top: 6px;
+    padding-left: 6px;
+    padding-right: 6px;
 }
