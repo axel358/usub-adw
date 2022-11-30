@@ -17,7 +17,8 @@
 
 import gi
 import urllib.parse as urlparse
-from gi.repository import Gtk, Gdk, GLib
+gi.require_version('Adw', '1')
+from gi.repository import Gtk, Gdk, Adw
 from youtube_transcript_api import YouTubeTranscriptApi as yt_api
 from youtube_transcript_api.formatters import WebVTTFormatter
 
@@ -28,24 +29,14 @@ class UsubWindow(Gtk.ApplicationWindow):
 
     subs_scroll = Gtk.Template.Child()
     url_entry = Gtk.Template.Child()
-    toast = Gtk.Template.Child()
-    toast_label = Gtk.Template.Child()
+    toast_overlay = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         provider = Gtk.CssProvider()
         provider.load_from_resource('/cu/axel/usub/style.css')
         Gtk.StyleContext.add_provider_for_display(Gdk.Display.get_default(), provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
-
-    def show_toast(self, text):
-        self.toast.set_reveal_child(True)
-        self.toast_label.set_text(text)
-        GLib.timeout_add(5000, self.hide_toast)
-
-    def hide_toast(self):
-        self.toast.set_reveal_child(False)
-        return False
-
+    
     @Gtk.Template.Callback()
     def parse_url(self, widget):
         video_id = self.get_video_id(self.url_entry.get_text())
@@ -62,22 +53,21 @@ class UsubWindow(Gtk.ApplicationWindow):
                 dialog.show()
         else:
             pass
-
+        
     def on_error_dialog(self, dialog, response):
         dialog.destroy()
-
+    
     def update_sub_list(self, sub_list):
         subs_list_box = Gtk.ListBox()
-        subs_list_box.add_css_class('rich-list')
-        subs_list_box.add_css_class('frame')
         subs_list_box.set_selection_mode(Gtk.SelectionMode.NONE)
         subs_list_box.set_margin_top(10)
         subs_list_box.set_margin_bottom(10)
         subs_list_box.set_margin_start(10)
         subs_list_box.set_margin_end(10)
         self.subs_scroll.set_child(subs_list_box)
-
+        
         for sub in sub_list:
+            row = Gtk.ListBoxRow()
             row_content = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
             row_content.append(Gtk.Image().new_from_icon_name('subtitle-symbolic'))
             sub_lang_label = Gtk.Label(label=sub.language)
@@ -85,33 +75,32 @@ class UsubWindow(Gtk.ApplicationWindow):
             sub_lang_label.props.halign = Gtk.Align.START
             sub_lang_label.set_margin_start(5)
             row_content.append(sub_lang_label)
-            box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-            box.add_css_class('linked')
             sub_download_btn = Gtk.Button().new_from_icon_name('download-symbolic')
-            # sub_download_btn.add_css_class('flat')
+            sub_download_btn.add_css_class('flat')
             sub_download_btn.add_css_class('suggested-button')
             sub_download_btn.connect('clicked', self.download_sub, sub)
-            # sub_download_btn.set_margin_start(5)
+            sub_download_btn.set_margin_start(5)
             sub_translate_btn = Gtk.Button().new_from_icon_name('translate-symbolic')
-            # sub_translate_btn.set_margin_start(5)
-            # sub_translate_btn.add_css_class('flat')
+            sub_translate_btn.set_margin_start(5)
+            sub_translate_btn.add_css_class('flat')
             sub_translate_btn.connect('clicked', self.translate_sub, sub)
-            box.append(sub_translate_btn)
-            box.append(sub_download_btn)
-            row_content.append(box)
-            subs_list_box.append(row_content)
-
+            row_content.append(sub_translate_btn)
+            row_content.append(sub_download_btn)
+            row.set_child(row_content)
+            row.set_margin_bottom(5)
+            subs_list_box.append(row)
+            
     def download_sub(self, button, sub):
         sub_content = sub.fetch()
         self.save_sub('subtitle_' + sub.language_code+'.srt', sub_content)
-
+        
     def save_sub(self, name, sub_content):
         dialog = Gtk.FileChooserDialog(transient_for=self, title='Save subtitle', action = Gtk.FileChooserAction.SAVE)
         dialog.add_buttons("_Cancel", Gtk.ResponseType.CANCEL, "_Save", Gtk.ResponseType.ACCEPT)
         dialog.set_current_name(name)
         dialog.connect('response', self.on_save_sub, sub_content)
         dialog.show()
-
+        
     def translate_sub(self, button, sub):
         dialog = Gtk.Dialog(transient_for=self, title='Enter language code', use_header_bar=True)
         lang_code_entry = Gtk.Entry()
@@ -124,28 +113,28 @@ class UsubWindow(Gtk.ApplicationWindow):
         dialog.add_buttons("_Cancel", Gtk.ResponseType.CANCEL, "_OK", Gtk.ResponseType.ACCEPT)
         dialog.connect('response', self.on_translate_sub, lang_code_entry, sub)
         dialog.show()
-
+        
     def on_translate_sub(self, dialog, response, entry, sub):
         if response == Gtk.ResponseType.ACCEPT:
             if len((lang_code:=entry.get_text())) > 1:
                 sub_content = sub.translate(lang_code).fetch()
                 self.save_sub('subtitle_' + lang_code + '.srt', sub_content)
-
+                
         dialog.destroy()
-
+        
     def on_save_sub(self, dialog, response, sub_content):
         if response == Gtk.ResponseType.ACCEPT:
             file_path = dialog.get_file().get_path()
-
+            
             formatter = WebVTTFormatter()
             sub = formatter.format_transcript(sub_content)
-
+            
             with open(file_path, 'w') as file:
                 file.write(sub)
-
+                
         dialog.destroy()
-        self.show_toast('Subtitle saved')
-
+        self.toast_overlay.add_toast(Adw.Toast().new(title = 'Subtitle saved'))
+    
     def get_video_id(self, url):
         url_data = urlparse.urlparse(url)
         if url_data.hostname == 'youtu.be':
@@ -159,7 +148,7 @@ class UsubWindow(Gtk.ApplicationWindow):
             if url_data.path[:3] == '/v/':
                 return url_data.path.split('/')[2]
         return None
-
+    
     @Gtk.Template.Callback()
     def on_about_action(self, widget):
         about = AboutDialog(self)
@@ -176,3 +165,4 @@ class AboutDialog(Gtk.AboutDialog):
         self.props.copyright = '(C) 2021 Axel'
         self.props.logo_icon_name = 'cu.axel.usub'
         self.set_transient_for(parent)
+

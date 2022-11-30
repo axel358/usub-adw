@@ -18,12 +18,13 @@
 import sys
 import gi
 gi.require_version('Gtk', '4.0')
-from gi.repository import Gtk, Gio
+gi.require_version('Adw', '1')
+from gi.repository import Gtk, Gio, Adw
 
 from .window import UsubWindow
 
 
-class Application(Gtk.Application):
+class Application(Adw.Application):
     def __init__(self):
         super().__init__(application_id='cu.axel.usub',
                          flags=Gio.ApplicationFlags.FLAGS_NONE)
