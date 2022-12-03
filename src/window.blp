@@ -6,8 +6,27 @@ template UsubWindow : ApplicationWindow {
   default-width: 600;
 
   Adw.ToastOverlay toast_overlay {
-    ScrolledWindow subs_scroll {
-      vexpand: true;
+    Box{
+      orientation: vertical;
+      margin-start: 12;
+      margin-end: 12;
+      margin-top: 12;
+      margin-bottom: 12;
+      spacing: 12;
+
+      Label title_label {
+        margin-start: 12;
+        margin-end: 12;
+        xalign: 0;
+        styles['title-3']
+      }
+
+      ScrolledWindow {
+        vexpand: true;
+        Viewport subs_scroll {
+
+        }
+      }
     }
   }
 
