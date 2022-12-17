@@ -1,17 +1,17 @@
 <div align="center">
   <h1>USub</h1>
-  A simple libadwita app to download subtitles for YouTube videos using<a href="https://github.com/jdepoix/youtube-transcript-api"> YouTube transcript api</a>
+  A GTK4 app to download subtitles for YouTube videos using<a href="https://github.com/jdepoix/youtube-transcript-api"> YouTube transcript api</a>
 </div>
 
-![Screenshot](screenshot.png)
+![Screenshot](screenshot.webp)
 
 ## Building:
 
-- **Install YouTube transcript api**
+- **Requirements**
 
  <i>pip install youtube_transcript_api</i>
 
-- **Then do:**
+- **Build**
 
  <i>meson build --prefix=/usr</i>
 
