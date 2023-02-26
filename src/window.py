@@ -19,9 +19,10 @@ import gi
 import urllib.parse as urlparse
 import requests
 from bs4 import BeautifulSoup
+import threading
 
 gi.require_version('Adw', '1')
-from gi.repository import Gtk, Gdk, Adw
+from gi.repository import Gtk, Gdk, Adw, GLib
 from youtube_transcript_api import YouTubeTranscriptApi as yt_api
 from youtube_transcript_api.formatters import WebVTTFormatter
 
@@ -30,49 +31,52 @@ from youtube_transcript_api.formatters import WebVTTFormatter
 class UsubWindow(Gtk.ApplicationWindow):
     __gtype_name__ = 'UsubWindow'
 
-    subs_scroll = Gtk.Template.Child()
+    subs_list_box = Gtk.Template.Child()
     url_entry = Gtk.Template.Child()
     toast_overlay = Gtk.Template.Child()
     title_label = Gtk.Template.Child()
+    main_stack = Gtk.Template.Child()
+    status_page = Gtk.Template.Child()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        provider = Gtk.CssProvider()
-        provider.load_from_resource('/cu/axel/usub/style.css')
-        Gtk.StyleContext.add_provider_for_display(
-            Gdk.Display.get_default(), provider,
-            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION)
 
     @Gtk.Template.Callback()
     def parse_url(self, widget):
         video_id = self.get_video_id(self.url_entry.get_text())
         if video_id:
-            try:
-                sub_list = yt_api.list_transcripts(video_id)
-                request = requests.get(self.url_entry.get_text())
-                soup = BeautifulSoup(request.text, 'html.parser')
-                title = soup.find('meta', attrs={
-                    'name': 'title'
-                }).attrs['content']
-                self.title_label.set_text(title)
-                self.update_sub_list(sub_list)
-            except Exception as e:
-                dialog = Adw.MessageDialog.new(self, 'Something went wrong')
-                dialog.set_body(str(e))
-                dialog.add_response("ok", _("_Ok"))
-                dialog.present()
-        else:
-            pass
+            self.main_stack.set_visible_child_name('loading_page')
+            url = self.url_entry.get_text()
 
-    def update_sub_list(self, sub_list):
-        subs_list_box = Gtk.ListBox()
-        # subs_list_box.set_selection_mode(Gtk.SelectionMode.NONE)
-        subs_list_box.set_margin_top(6)
-        subs_list_box.set_margin_start(12)
-        subs_list_box.set_margin_end(12)
-        subs_list_box.set_margin_bottom(6)
-        subs_list_box.add_css_class('boxed-list')
-        self.subs_scroll.set_child(subs_list_box)
+            thread = threading.Thread(target=self.get_subs, args=(url, video_id))
+            thread.daemon = True
+            thread.start()
+        else:
+            self.toast_overlay.add_toast(Adw.Toast().new(title='Enter a valid url'))
+
+    def get_subs(self, url, video_id):
+        try:
+            sub_list = yt_api.list_transcripts(video_id)
+            request = requests.get(url)
+            soup = BeautifulSoup(request.text, 'html.parser')
+            title = soup.find('meta', attrs={'name': 'title'}).attrs['content']
+            GLib.idle_add(self.update_sub_list, title, sub_list)
+        except Exception as e:
+            GLib.idle_add(self.show_error, e)
+
+    def show_error(self, e: Exception):
+        self.main_stack.set_visible_child_name('status_page')
+        self.status_page.set_title('Something went wrong')
+        # self.status_page.set_description('"' + e.message + '"')
+
+    def update_sub_list(self, title, sub_list):
+        self.title_label.set_text(title)
+
+        child = self.subs_list_box.get_first_child()
+
+        while child is not None:
+            self.subs_list_box.remove(child)
+            child = self.subs_list_box.get_first_child()
 
         for sub in sub_list:
             row = Adw.ActionRow()
@@ -92,7 +96,9 @@ class UsubWindow(Gtk.ApplicationWindow):
 
             row.add_suffix(sub_translate_btn)
             row.add_suffix(sub_download_btn)
-            subs_list_box.append(row)
+            self.subs_list_box.append(row)
+
+        self.main_stack.set_visible_child_name('subs_page')
 
     def download_sub(self, button, sub):
         sub_content = sub.fetch()
@@ -137,8 +143,10 @@ class UsubWindow(Gtk.ApplicationWindow):
             with open(file_path, 'w') as file:
                 file.write(sub)
 
+            self.toast_overlay.add_toast(Adw.Toast().new(title='Subtitle saved'))
+
         dialog.destroy()
-        self.toast_overlay.add_toast(Adw.Toast().new(title='Subtitle saved'))
+
 
     def get_video_id(self, url):
         url_data = urlparse.urlparse(url)
