@@ -6,6 +6,31 @@ template UsubWindow : ApplicationWindow {
   default-width: 600;
 
   Adw.ToastOverlay toast_overlay {
+    Stack main_stack {
+      transition-type: crossfade;
+
+    StackPage {
+      name: "status_page";
+      child: Adw.StatusPage status_page {
+        icon-name: "subtitle-symbolic";
+        title: "Enter an url to get started";
+      };
+    }
+
+    StackPage {
+      name: "loading_page";
+      child: Spinner {
+        spinning: true;
+        halign: center;
+        valign: center;
+        width-request: 64;
+        height-request: 64;
+      };
+    }
+
+    StackPage {
+      name: "subs_page";
+      child:
     Box{
       orientation: vertical;
       margin-start: 12;
@@ -15,18 +40,29 @@ template UsubWindow : ApplicationWindow {
       spacing: 12;
 
       Label title_label {
+        ellipsize: end;
         margin-start: 12;
         margin-end: 12;
-        xalign: 0;
         styles['title-3']
       }
 
       ScrolledWindow {
         vexpand: true;
-        Viewport subs_scroll {
-
-        }
+        child:
+        Adw.Clamp {
+          margin-top: 6;
+          margin-bottom: 6;
+          margin-start: 6;
+          margin-end: 6;
+          tightening-threshold: 440;
+          child:
+          ListBox subs_list_box {
+            styles ["boxed-list"]
+          };
+        };
       }
+    };
+    }
     }
   }
 
@@ -41,6 +77,7 @@ template UsubWindow : ApplicationWindow {
     [title]
     Entry url_entry {
       hexpand: true;
+      halign: fill;
       placeholder-text: "Video url";
       activate => parse_url();
     }
