@@ -1,12 +1,37 @@
 using Gtk 4.0;
 using Adw 1;
 
-template UsubWindow : ApplicationWindow {
+template UsubWindow : Adw.ApplicationWindow {
   default-height: 500;
   default-width: 600;
   width-request: 360;
 
-  Adw.ToastOverlay toast_overlay {
+  Box {
+    orientation: vertical;
+
+    HeaderBar header_bar {
+      [start]
+      Button {
+        icon-name: "help-about-symbolic";
+        clicked => on_about_action();
+    }
+
+    [title]
+    Entry url_entry {
+      hexpand: true;
+      halign: fill;
+      placeholder-text: "Video url";
+      activate => parse_url();
+    }
+
+    [end]
+    Button {
+      icon-name: "edit-find-symbolic";
+      clicked => parse_url();
+    }
+    }
+
+    Adw.ToastOverlay toast_overlay {
     Stack main_stack {
       transition-type: crossfade;
 
@@ -64,27 +89,5 @@ template UsubWindow : ApplicationWindow {
     }
     }
   }
-
-  [titlebar]
-  HeaderBar header_bar {
-    [start]
-    Button {
-      icon-name: "help-about-symbolic";
-      clicked => on_about_action();
-    }
-
-    [title]
-    Entry url_entry {
-      hexpand: true;
-      halign: fill;
-      placeholder-text: "Video url";
-      activate => parse_url();
-    }
-
-    [end]
-    Button {
-      icon-name: "edit-find-symbolic";
-      clicked => parse_url();
-    }
   }
 }

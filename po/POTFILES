@@ -1,7 +1,6 @@
-data/cu.axel.usub.desktop.in
-data/cu.axel.usub.appdata.xml.in
-data/cu.axel.usub.gschema.xml
-src/window.ui
+data/cu.axel.USub.desktop.in
+data/cu.axel.USub.appdata.xml.in
+data/cu.axel.USub.gschema.xml
 src/main.py
 src/window.py
-
+src/window.ui

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/cu/axel/usub">
-    <file compressed="true" preprocess="xml-stripblanks">window.ui</file>
-    <file compressed="true">style.css</file>
+  <gresource prefix="/cu/axel/USub">
     <file compressed="true" preprocess="xml-stripblanks">gtk/help-overlay.ui</file>
+    <file preprocess="xml-stripblanks">window.ui</file>
+    <file compressed="true">style.css</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="icons/scalable/actions/download-symbolic.svg" >../data/icons/download-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="icons/scalable/actions/translate-symbolic.svg" >../data/icons/translate-symbolic.svg</file>
     <file compressed="true" preprocess="xml-stripblanks" alias="icons/scalable/actions/subtitle-symbolic.svg" >../data/icons/subtitle-symbolic.svg</file>

@@ -20,15 +20,13 @@ import urllib.parse as urlparse
 import requests
 from bs4 import BeautifulSoup
 import threading
-
-gi.require_version('Adw', '1')
 from gi.repository import Gtk, Gdk, Adw, GLib
 from youtube_transcript_api import YouTubeTranscriptApi as yt_api
 from youtube_transcript_api.formatters import WebVTTFormatter
 
 
-@Gtk.Template(resource_path='/cu/axel/usub/window.ui')
-class UsubWindow(Gtk.ApplicationWindow):
+@Gtk.Template(resource_path='/cu/axel/USub/window.ui')
+class UsubWindow(Adw.ApplicationWindow):
     __gtype_name__ = 'UsubWindow'
 
     subs_list_box = Gtk.Template.Child()
@@ -47,12 +45,11 @@ class UsubWindow(Gtk.ApplicationWindow):
         if video_id:
             self.main_stack.set_visible_child_name('loading_page')
             url = self.url_entry.get_text()
-
             thread = threading.Thread(target=self.get_subs, args=(url, video_id))
             thread.daemon = True
             thread.start()
         else:
-            self.toast_overlay.add_toast(Adw.Toast().new(title='Enter a valid url'))
+            Adw.Toast().new(title='Enter a valid url')
 
     def get_subs(self, url, video_id):
         try:
@@ -67,6 +64,7 @@ class UsubWindow(Gtk.ApplicationWindow):
     def show_error(self, e: Exception):
         self.main_stack.set_visible_child_name('status_page')
         self.status_page.set_title('Something went wrong')
+        print(repr(e))
         # self.status_page.set_description('"' + e.message + '"')
 
     def update_sub_list(self, title, sub_list):
@@ -143,10 +141,9 @@ class UsubWindow(Gtk.ApplicationWindow):
             with open(file_path, 'w') as file:
                 file.write(sub)
 
-            self.toast_overlay.add_toast(Adw.Toast().new(title='Subtitle saved'))
+            Adw.Toast().new(title='Subtitle saved')
 
         dialog.destroy()
-
 
     def get_video_id(self, url):
         url_data = urlparse.urlparse(url)
@@ -168,7 +165,7 @@ class UsubWindow(Gtk.ApplicationWindow):
         about_window = Adw.AboutWindow(
             transient_for=self,
             application_name='USub',
-            application_icon='cu.axel.usub',
+            application_icon='cu.axel.USub',
             version='0.7.0',
             developer_name='Axel358',
             website='https://github.com/axel358/usub-gtk',

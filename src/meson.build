@@ -10,6 +10,7 @@ blueprints = custom_target('blueprints',
   command: [find_program('blueprint-compiler'), 'batch-compile', '@OUTPUT@', '@CURRENT_SOURCE_DIR@', '@INPUT@'],
 )
 
+
 gnome.compile_resources('usub',
   'usub.gresource.xml',
   gresource_bundle: true,
@@ -31,7 +32,8 @@ configure_file(
   output: 'usub',
   configuration: conf,
   install: true,
-  install_dir: get_option('bindir')
+  install_dir: get_option('bindir'),
+  install_mode: 'r-xr--r--'
 )
 
 usub_sources = [

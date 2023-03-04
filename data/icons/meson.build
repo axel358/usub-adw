@@ -1,4 +1,4 @@
-application_id = 'cu.axel.usub'
+application_id = 'cu.axel.USub'
 
 scalable_dir = join_paths('hicolor', 'scalable', 'apps')
 install_data(
