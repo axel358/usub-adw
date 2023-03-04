@@ -1,0 +1,112 @@
+{
+    "app-id" : "cu.axel.USub",
+    "runtime" : "org.gnome.Platform",
+    "runtime-version" : "43",
+    "sdk" : "org.gnome.Sdk",
+    "command" : "usub",
+    "finish-args" : [
+	"--share=network",
+	"--share=ipc",
+	"--socket=fallback-x11",
+	"--device=dri",
+	"--socket=wayland"
+    ],
+    "cleanup" : [
+	"/include",
+	"/lib/pkgconfig",
+	"/man",
+	"/share/doc",
+	"/share/gtk-doc",
+	"/share/man",
+	"/share/pkgconfig",
+	"*.la",
+	"*.a"
+    ],
+    "modules" : [
+	{
+	    "name": "blueprint-compiler",
+	    "buildsystem": "meson",
+	    "sources": [
+		{
+		"type": "git",
+		"url": "https://gitlab.gnome.org/jwestman/blueprint-compiler",
+		"tag": "v0.4.0",
+		"commit": "75a6d95988736ec0471d22ceb07579c0cedac2ad"
+		}]
+    },
+	{
+    "name": "python3-youtube_transcript_api",
+    "buildsystem": "simple",
+    "build-commands": [
+	"pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"youtube_transcript_api\" --no-build-isolation"
+    ],
+    "sources": [
+	{
+	    "type": "file",
+	    "url": "https://files.pythonhosted.org/packages/71/4c/3db2b8021bd6f2f0ceb0e088d6b2d49147671f25832fb17970e9b583d742/certifi-2022.12.7-py3-none-any.whl",
+	    "sha256": "4ad3232f5e926d6718ec31cfc1fcadfde020920e278684144551c91769c7bc18"
+	},
+	{
+	    "type": "file",
+	    "url": "https://files.pythonhosted.org/packages/96/d7/1675d9089a1f4677df5eb29c3f8b064aa1e70c1251a0a8a127803158942d/charset-normalizer-3.0.1.tar.gz",
+	    "sha256": "ebea339af930f8ca5d7a699b921106c6e29c617fe9606fa7baa043c1cdae326f"
+	},
+	{
+	    "type": "file",
+	    "url": "https://files.pythonhosted.org/packages/fc/34/3030de6f1370931b9dbb4dad48f6ab1015ab1d32447850b9fc94e60097be/idna-3.4-py3-none-any.whl",
+	    "sha256": "90b77e79eaa3eba6de819a0c442c0b4ceefc341a7a2ab77d7562bf49f425c5c2"
+	},
+	{
+	    "type": "file",
+	    "url": "https://files.pythonhosted.org/packages/d2/f4/274d1dbe96b41cf4e0efb70cbced278ffd61b5c7bb70338b62af94ccb25b/requests-2.28.2-py3-none-any.whl",
+	    "sha256": "64299f4909223da747622c030b781c0d7811e359c37124b4bd368fb8c6518baa"
+	},
+	{
+	    "type": "file",
+	    "url": "https://files.pythonhosted.org/packages/fe/ca/466766e20b767ddb9b951202542310cba37ea5f2d792dae7589f1741af58/urllib3-1.26.14-py2.py3-none-any.whl",
+	    "sha256": "75edcdc2f7d85b137124a6c3c9fc3933cdeaa12ecb9a6a959f22797a0feca7e1"
+	},
+	{
+	    "type": "file",
+	    "url": "https://files.pythonhosted.org/packages/ad/4c/6a8415466ab63ef02724fa4abc714d260585fedecee406895f40cba385fa/youtube_transcript_api-0.5.0-py3-none-any.whl",
+	    "sha256": "e9ecbb663a0cabbe57424971298d52f764b607fab7318dd51ac545004b6fd06c"
+	}
+    ]
+},
+{
+    "name": "python3-bs4",
+    "buildsystem": "simple",
+    "build-commands": [
+        "pip3 install --verbose --exists-action=i --no-index --find-links=\"file://${PWD}\" --prefix=${FLATPAK_DEST} \"bs4\" --no-build-isolation"
+    ],
+    "sources": [
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/c6/ee/16d6f808f5668317d7c23f942091fbc694bcded6aa39678e5167f61b2ba0/beautifulsoup4-4.11.2-py3-none-any.whl",
+            "sha256": "0e79446b10b3ecb499c1556f7e228a53e64a2bfcebd455f370d8927cb5b59e39"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/10/ed/7e8b97591f6f456174139ec089c769f89a94a1a4025fe967691de971f314/bs4-0.0.1.tar.gz",
+            "sha256": "36ecea1fd7cc5c0c6e4a1ff075df26d50da647b75376626cc186e2212886dd3a"
+        },
+        {
+            "type": "file",
+            "url": "https://files.pythonhosted.org/packages/d2/70/2c92d7bc961ba43b7b21032b7622144de5f97dec14b62226533f6940798e/soupsieve-2.4-py3-none-any.whl",
+            "sha256": "49e5368c2cda80ee7e84da9dbe3e110b70a4575f196efb74e51b94549d921955"
+        }
+    ]
+},
+{
+	    "name" : "usub",
+	    "builddir" : true,
+	    "buildsystem" : "meson",
+	    "sources" : [
+		{
+		    "type" : "dir",
+		    "path" : "."
+		}
+	    ]
+	}
+    ]
+}
