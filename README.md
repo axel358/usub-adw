@@ -3,9 +3,8 @@
   A GTK4 app to download subtitles for YouTube videos using<a href="https://github.com/jdepoix/youtube-transcript-api"> YouTube transcript api</a>
 </div>
 
-<div align="center">
+
 ![Screenshot](screenshot.webp)
-</div>
 
 ## Building:
 
